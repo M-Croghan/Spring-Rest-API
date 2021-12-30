@@ -1,2 +1,3 @@
-# Sprint-Rest-API
+# RECIPE API
+ 
 Recipe API - Java, Spring Boot, PostgreSQL, JWT, Postman
