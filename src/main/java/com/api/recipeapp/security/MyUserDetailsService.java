@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 // Allows for loading of a specific user and related details
+// UserDetailsService is a core interface in the Spring Security Framework
+// Retrieves user's authorization & authentication information
 @Service
 public class MyUserDetailsService implements UserDetailsService {
     private UserService userService;

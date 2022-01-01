@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
-
+// Secures the endpoints
 // if @EnableWebSecurity not defined, then we're going to get an error with the PasswordEncoder
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {

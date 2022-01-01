@@ -4,6 +4,7 @@ import com.api.recipeapp.exception.InformationExistException;
 import com.api.recipeapp.exception.InformationNotFoundException;
 import com.api.recipeapp.model.Category;
 import com.api.recipeapp.model.Recipe;
+import com.api.recipeapp.model.User;
 import com.api.recipeapp.repository.CategoryRepository;
 import com.api.recipeapp.repository.RecipeRepository;
 import com.api.recipeapp.security.MyUserDetails;
@@ -212,5 +213,18 @@ public class CategoryService {
         } else {
             throw new InformationExistException("Category does not exist with id " + categoryId);
         }
+    }
+
+    //TODO: Return all public recipes!
+    public List<Recipe> getPublicRecipes() {
+        LOGGER.info("calling getPublicRecipes() method from CategoryController");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        User user = userDetails.getUser();
+        if (user != null){
+            return recipeRepository.findAll();
+        }
+        throw new InformationNotFoundException("No Recipes Found!");
+
     }
 }

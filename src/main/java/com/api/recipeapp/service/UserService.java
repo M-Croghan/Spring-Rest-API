@@ -2,20 +2,25 @@ package com.api.recipeapp.service;
 
 
 import com.api.recipeapp.exception.InformationExistException;
+import com.api.recipeapp.exception.InformationNotFoundException;
 import com.api.recipeapp.model.User;
+import com.api.recipeapp.model.UserProfile;
 import com.api.recipeapp.model.request.LoginRequest;
 import com.api.recipeapp.model.response.LoginResponse;
 import com.api.recipeapp.repository.UserRepository;
 import com.api.recipeapp.security.JWTUtils;
+import com.api.recipeapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 // Business Logic
@@ -65,7 +70,42 @@ public class UserService {
         return userRepository.findUserByEmailAddress(email);
     }
 
-//    public UserProfile createProfile(UserProfile user) {
-//
-//    }
+   // TODO: Advanced Exception & Error Handling
+   public UserProfile createProfile(UserProfile user) {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+               .getPrincipal();
+        Optional<User> userProfile = userRepository.findByIdAndEmailAddress(userDetails.getUser().getId(),
+                userDetails.getUsername());
+        if (userProfile.isPresent() && userProfile.get().getUserProfile() != null){
+            throw new InformationExistException("This user has a profile!");
+        }
+        else{
+            UserProfile newUser = new UserProfile(user.getFirstName(), user.getLastName(), user.getProfileDescription(),
+                    userDetails.getUser());
+            userProfile.get().setUserProfile(newUser);
+            return userRepository.save(newUser);
+        }
+    }
+
+    // TODO: Advanced Exception & Error Handling
+    public UserProfile updateProfile(UserProfile user) {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        Optional<User> userProfile = userRepository.findByIdAndEmailAddress(userDetails.getUser().getId(), userDetails.getUsername());
+        if (userProfile.isPresent()){
+            UserProfile profile = userProfile.get().getUserProfile();
+            if (profile.getProfileDescription() != null){
+                profile.setFirstName(user.getFirstName());
+                profile.setLastName(user.getLastName());
+                profile.setProfileDescription(user.getProfileDescription());
+                return userRepository.save(profile);
+            }
+            else {
+                throw new InformationNotFoundException("This user has no profile to update!");
+            }
+        }
+        else{
+            throw new InformationNotFoundException("This user has no profile to update!");
+        }
+    }
 }

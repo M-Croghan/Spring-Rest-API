@@ -1,14 +1,12 @@
 package com.api.recipeapp.controller;
 
 import com.api.recipeapp.model.User;
+import com.api.recipeapp.model.UserProfile;
 import com.api.recipeapp.model.request.LoginRequest;
 import com.api.recipeapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Logger;
 
@@ -36,10 +34,17 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
 
-    // http://localhost:9092/auth/api/profile
-//    @PostMapping("/profile")
-//    public UserProfile createProfile(@RequestBody UserProfile user){
-//        LOGGER.info("Calling createProfile method from Controller!");
-//        return userService.createProfile(user);
-//    }
+    // http://localhost:9092/auth/users/profile
+    @PostMapping("/profile")
+    public UserProfile createProfile(@RequestBody UserProfile user){
+        LOGGER.info("Calling createProfile method from Controller!");
+        return userService.createProfile(user);
+    }
+
+    // http://localhost:9092/auth/users/profile
+    @PutMapping("/profile")
+    public UserProfile updateProfile(@RequestBody UserProfile user){
+        LOGGER.info("Calling updateProfile method from Controller!");
+        return userService.updateProfile(user);
+    }
 }

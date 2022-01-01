@@ -95,11 +95,18 @@ public class CategoryController {
     }
 
     // DELETE - Recipe
-    // // http://localhost:9092/api/categories/10/recipes/1
+    // http://localhost:9092/api/categories/10/recipes/1
     @DeleteMapping("/categories/{categoryId}/recipes/{recipeId}")
     public Optional<Recipe> deleteCategoryRecipe(@PathVariable(value = "categoryId") Long categoryId,
                                                  @PathVariable(value = "recipeId") Long recipeId) {
         LOGGER.info("Calling deleteCategoryRecipe method from controller");
         return categoryService.deleteCategoryRecipe(categoryId, recipeId);
+    }
+
+    // http://localhost:9092/api/public-recipes/
+    @GetMapping("/public-recipes")
+    public List<Recipe> getPublicRecipes(){
+        LOGGER.info("calling getPublicRecipes() method from CategoryController");
+        return categoryService.getPublicRecipes();
     }
 }

@@ -29,6 +29,12 @@ public class UserProfile {
     public UserProfile() {
     }
 
+    public UserProfile(String firstName, String lastName, String profileDescription, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profileDescription = profileDescription;
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
